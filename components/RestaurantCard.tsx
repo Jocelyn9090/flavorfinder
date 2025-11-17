@@ -1,6 +1,7 @@
+
 import React, { FC } from 'react';
 import type { Restaurant } from '../types';
-import { MapPinIcon, MessageSquareIcon, StarIcon } from './Icons';
+import { MapPinIcon, MessageSquareIcon, StarIcon, BookmarkIcon, BookmarkFilledIcon, TrashIcon } from './Icons';
 
 interface RestaurantCardProps {
     restaurant: Restaurant;
@@ -8,6 +9,10 @@ interface RestaurantCardProps {
     onInvite: () => void;
     className?: string;
     style?: React.CSSProperties;
+    onSave?: () => void;
+    isSaved?: boolean;
+    onDelete?: () => void;
+    managementControls?: React.ReactNode;
 }
 
 const renderStars = (rating?: number) => {
@@ -24,16 +29,28 @@ const renderStars = (rating?: number) => {
     );
 };
 
-export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurant, mapLink, onInvite, className, style }) => {
+export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurant, mapLink, onInvite, className, style, onSave, isSaved, onDelete, managementControls }) => {
     return (
         <div 
-            className={`bg-white rounded-xl shadow-lg p-6 flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300 ease-in-out h-full border border-gray-100 hover:shadow-xl hover:border-orange-200 ${className}`}
+            className={`bg-white rounded-xl shadow-lg p-6 flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300 ease-in-out h-full border border-gray-100 hover:shadow-xl hover:border-blue-200 ${className}`}
             style={style}
         >
             <div>
-                <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold text-gray-800">{restaurant.name}</h3>
-                    {restaurant.priceRange && <div className="text-sm font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{restaurant.priceRange}</div>}
+                <div className="flex justify-between items-start mb-2 gap-3">
+                    <h3 className="text-xl font-bold text-gray-800 flex-1">{restaurant.name}</h3>
+                    <div className="flex items-center flex-shrink-0">
+                        {restaurant.priceRange && <div className="text-sm font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md mr-2">{restaurant.priceRange}</div>}
+                        {onSave && (
+                            <button 
+                                onClick={onSave} 
+                                disabled={isSaved} 
+                                aria-label={isSaved ? 'Restaurant is saved' : 'Save restaurant'}
+                                className="text-gray-400 hover:text-blue-500 disabled:text-blue-500 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {isSaved ? <BookmarkFilledIcon className="w-6 h-6"/> : <BookmarkIcon className="w-6 h-6"/>}
+                            </button>
+                        )}
+                    </div>
                 </div>
                  {restaurant.rating && (
                     <div className="mb-3">
@@ -55,10 +72,19 @@ export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurant, mapLink, o
                 )}
                 <button
                     onClick={onInvite}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 shadow-sm"
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 shadow-sm"
                 >
                     <MessageSquareIcon /> Invite Friends
                 </button>
+                {managementControls}
+                {onDelete && (
+                     <button
+                        onClick={onDelete}
+                        className="bg-red-100 hover:bg-red-200 text-red-700 font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
+                    >
+                        <TrashIcon /> Delete
+                    </button>
+                )}
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 
-export type AppState = 'initial' | 'loading_location' | 'loading_restaurants' | 'results' | 'error';
+export type AppState = 'initial' | 'loading_location' | 'loading_restaurants' | 'results' | 'error' | 'viewing_saved_places';
 
 export interface Restaurant {
     name: string;
@@ -18,4 +18,24 @@ export interface GroundingChunk {
         uri: string;
         title: string;
     };
+}
+
+export interface SavedSearch {
+    id: string;
+    cuisine: string;
+    location: GeoLocation;
+    timestamp: number;
+}
+
+export interface Collection {
+    id: string;
+    name: string;
+}
+
+export interface SavedPlace extends Restaurant {
+    id: string;
+    cuisine: string;
+    mapLink?: string;
+    savedAt: number;
+    collectionIds: string[];
 }
