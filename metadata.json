@@ -1,0 +1,7 @@
+{
+  "name": "Flavor Finder",
+  "description": "Find the best local restaurants with Flavor Finder! Craving a cuisine? We'll find top spots near you and help you invite friends for a meal.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
